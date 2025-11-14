@@ -88,7 +88,6 @@
       color: var(--igda-orange);
     }
 
-    /* NEW: small info line about reveal date */
     .reveal-info {
       margin-top: 0.6rem;
       font-size: 0.85rem;
@@ -119,7 +118,7 @@
       transition: filter 0.25s ease, opacity 0.25s ease;
     }
 
-    /* blur til gate/date passed */
+    /* blur ennen lipputarkastusta */
     .blurred {
       filter: blur(12px);
       pointer-events: none;
@@ -440,16 +439,9 @@
   </div>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbyDRfKGZL2r-u0UjX-ma9XUBvqOYMFhPzWZf8eoKQO7juJRyUMw9LCS0xvBMv2uh8qE/exec";
+    // Sama Web App -osoite, jota Apps Script käyttää
+    const API_URL = "https://script.google.com/macros/s/AKfycbxs8RunRPXTmcarb-PyZw8ybpEgIn2Qy4QS4rZC8DpUNwSUFnW3HUknGSmVaf6i2nYJ/exec";
     const STORAGE_KEY = "igdaKajaaniAwardsTicketOK";
-
-    // 🔴 CHANGE THIS to your real reveal time (local Helsinki time)
-    const REVEAL_AT = new Date("2025-11-28T18:00:00+02:00");
-    const REVEAL_AT_TEXT = "28.11.2025 klo 18.00";
-
-    function isAfterRevealDate() {
-      return new Date() >= REVEAL_AT;
-    }
 
     function parseNomineeName(name) {
       const parts = String(name).split("http");
@@ -473,14 +465,17 @@
       categories.classList.remove("blurred");
     }
 
-    // currently still Sheet/placeholder based – replace later with Eventbrite API if you want
+    // Kutsu Apps Scriptin doGet?mode=ticket&email=...
     async function checkTicket(email) {
-      const res = await fetch(API_URL + "?mode=ticket&email=" + encodeURIComponent(email.trim()));
+      const res = await fetch(
+        API_URL + "?mode=ticket&email=" + encodeURIComponent(email.trim())
+      );
       if (!res.ok) throw new Error("HTTP " + res.status);
       const data = await res.json();
       return data && data.valid === true;
     }
 
+    // Hakee statsit ja piirtää kortit
     async function loadData() {
       const status = document.getElementById('status');
       const container = document.getElementById('categories');
@@ -576,20 +571,8 @@
           container.appendChild(section);
         });
 
-        // Date-based: if reveal time is past, automatically show results to everyone
-        if (isAfterRevealDate()) {
-          const overlay = document.getElementById("gateOverlay");
-          const categories = document.getElementById("categories");
-          overlay.style.display = "none";
-          categories.classList.remove("blurred");
-        } else if (hasTicketAccess()) {
-          // before reveal: only show for users who already passed the gate
-          grantTicketAccess();
-        }
-
       } catch (err) {
         console.error(err);
-        const status = document.getElementById('status');
         status.textContent = "Virhe ladattaessa äänestysdataa. Tarkista API_URL.";
       }
     }
@@ -603,19 +586,11 @@
       const gateStatus = document.getElementById("gateStatus");
       const revealInfo = document.getElementById("revealInfo");
 
-      // Update text about reveal timing
-      if (isAfterRevealDate()) {
-        revealInfo.textContent = "Tulokset ovat nyt julkisia.";
-      } else {
-        revealInfo.textContent = "Tulokset näytetään kokonaan " + REVEAL_AT_TEXT + " alkaen.";
-      }
+      // Pieni tekstiselite
+      revealInfo.textContent = "Tulokset näkyvät vain tapahtuman osallistujille (Eventbrite-lipun haltijoille).";
 
-      // If reveal date is already past → no gate at all, no blur
-      if (isAfterRevealDate()) {
-        overlay.style.display = "none";
-        categories.classList.remove("blurred");
-      } else if (hasTicketAccess()) {
-        // before reveal but user previously passed gate
+      // Jos selaimella on jo hyväksytty lippu → ei overlayta
+      if (hasTicketAccess()) {
         overlay.style.display = "none";
         categories.classList.remove("blurred");
       }
