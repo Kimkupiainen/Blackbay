@@ -392,19 +392,19 @@
     <!-- GATE OVERLAY -->
     <div class="gate-overlay" id="gateOverlay">
       <div class="gate-card">
-        <div class="gate-title">Näytä Game Awards -lippusi</div>
+        <div class="gate-title">Provide your Game Awards -ticket</div>
         <p class="gate-text">
-          Äänestystilastot näkyvät vain niille, joilla on lippu
-          <strong>IGDA Kajaani Game Awards</strong> -iltaan.
-          <small>Syötä se sähköpostiosoite, jota käytit Eventbrite-lipun varaamiseen.</small>
+          Voting statistics are available to ones, with a ticket to the
+          <strong>IGDA Kajaani Game Awards</strong> -night.
+          <small>Provide the email, that you used reserving the Eventbrite-ticket.</small>
         </p>
 
-        <label class="gate-label" for="ticketEmail">Eventbrite-sähköpostiosoite</label>
+        <label class="gate-label" for="ticketEmail">email</label>
         <input id="ticketEmail" class="gate-input" type="email" placeholder="esimerkki@domain.fi" autocomplete="email">
 
         <div class="gate-actions">
           <button class="gate-btn gate-btn-primary" id="checkTicketBtn">
-            ✅ Tarkista lippu
+            ✅ Check for ticket
           </button>
           <button class="gate-btn gate-btn-ghost" id="noTicketInfo">
             Minulla ei ole lippua
@@ -417,30 +417,30 @@
     <header>
       <div class="pill">
         <span class="pill-dot"></span>
-        IGDA Kajaani • Community Awards
+        IGDA Kajaani • Game Awards
       </div>
-      <h1>IGDA Kajaani Game Awards – Äänestystilastot</h1>
-      <p class="subtitle">Live-tilanne yhteisön äänistä, anonyymisti koottuna.</p>
+      <h1>IGDA Kajaani Game Awards – Voting statistics</h1>
+      <p class="subtitle">Live-update of the voting of the community, anonymized.</p>
       <p class="lead">
-        Tämä sivu näyttää, miten ääniä on kertynyt eri kategorioissa.
-        <strong>Sähköposteja tai henkilötietoja ei koskaan näytetä julkisesti.</strong>
+        This page showcases how votes have accumulated in different categories.
+        <strong>emails or other data are not handled publicly.</strong>
       </p>
       <p id="revealInfo" class="reveal-info"></p>
     </header>
 
     <main>
-      <div id="status">Ladataan äänestysdataa…</div>
+      <div id="status">Loading voting data…</div>
       <div id="categories" class="blurred"></div>
     </main>
 
     <footer>
-      IGDA Kajaani &middot; Data päivittyy Google Sheetsistä reaaliaikaisesti.
+      IGDA Kajaani &middot; Data updated from Google Sheets in real time.
     </footer>
   </div>
 
   <script>
     // Sama Web App -osoite, jota Apps Script käyttää
-    const API_URL = "https://script.google.com/macros/s/AKfycbxs8RunRPXTmcarb-PyZw8ybpEgIn2Qy4QS4rZC8DpUNwSUFnW3HUknGSmVaf6i2nYJ/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbydZ_MTGY4OJdLBj1IJ-TAI-om_42Bw6TAbmDhhSxIt2uRH9WHk34lIvRNww9oeIEJb/exec";
     const STORAGE_KEY = "igdaKajaaniAwardsTicketOK";
 
     function parseNomineeName(name) {
@@ -486,7 +486,7 @@
         const data = await res.json();
 
         if (!data.categories || data.categories.length === 0) {
-          status.textContent = "Ei vielä äänestysdataa.";
+          status.textContent = "No data available.";
           return;
         }
 
@@ -506,7 +506,7 @@
 
           const meta = document.createElement('div');
           meta.className = 'category-meta';
-          meta.textContent = "Ääniä yhteensä: " +
+          meta.textContent = "Total votes: " +
             category.nominees.reduce((sum, n) => sum + n.votes, 0);
 
           headerDiv.appendChild(title);
@@ -560,7 +560,7 @@
 
             const votesSpan = document.createElement('span');
             votesSpan.className = 'votes';
-            votesSpan.textContent = nominee.votes + " ääntä";
+            votesSpan.textContent = nominee.votes + " votes";
 
             row.appendChild(nameSpan);
             row.appendChild(votesSpan);
@@ -573,7 +573,7 @@
 
       } catch (err) {
         console.error(err);
-        status.textContent = "Virhe ladattaessa äänestysdataa. Tarkista API_URL.";
+        status.textContent = "An error has occured. check API_URL.";
       }
     }
 
@@ -587,7 +587,7 @@
       const revealInfo = document.getElementById("revealInfo");
 
       // Pieni tekstiselite
-      revealInfo.textContent = "Tulokset näkyvät vain tapahtuman osallistujille (Eventbrite-lipun haltijoille).";
+      revealInfo.textContent = "Results will only be shown to the people with a ticket to the event (Eventbrite-lipun haltijoille).";
 
       // Jos selaimella on jo hyväksytty lippu → ei overlayta
       if (hasTicketAccess()) {
@@ -601,30 +601,30 @@
         gateStatus.textContent = "";
 
         if (!email) {
-          gateStatus.textContent = "Syötä sähköpostiosoite.";
+          gateStatus.textContent = "enter email address.";
           return;
         }
 
-        gateStatus.textContent = "Tarkistetaan lippua…";
+        gateStatus.textContent = "Searching for ticket…";
 
         try {
           const valid = await checkTicket(email);
           if (valid) {
-            gateStatus.textContent = "Lippu löytyi – tervetuloa!";
+            gateStatus.textContent = "ticket found – welcome!";
             gateStatus.classList.add("ok");
             grantTicketAccess();
           } else {
-            gateStatus.textContent = "Lippua ei löytynyt tällä osoitteella.";
+            gateStatus.textContent = "No ticket with this address. Check your email for the ticket to the event";
           }
         } catch (e) {
           console.error(e);
-          gateStatus.textContent = "Tarkistus epäonnistui. Yritä uudelleen myöhemmin.";
+          gateStatus.textContent = "Check failed. Try again later.";
         }
       });
 
       noTicketBtn.addEventListener("click", () => {
         gateStatus.classList.remove("ok");
-        gateStatus.textContent = "Jos haluat nähdä tulokset, hanki lippu Eventbritesta. ❤️";
+        gateStatus.textContent = "If you want to see the current results, get the ticket from Eventbrite. ❤️";
       });
 
       loadData();
