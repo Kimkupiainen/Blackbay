@@ -1,0 +1,55 @@
+/* Root + base */
+:root { --ring: rgba(255,255,255,0.10); }
+html, body { height: 100%; }
+body {
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+/* Focus style */
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: 2px solid #ff4242;
+  outline-offset: 3px;
+  border-radius: 0.75rem;
+}
+
+/* Effects */
+.logo-glow {
+  filter: drop-shadow(0 0 20px #c92a2a80) drop-shadow(0 0 60px #ff424280);
+}
+
+/* Background helpers moved from inline styles */
+.backdrop-noise {
+  background-image: radial-gradient(circle at 1px 1px, #fff 1px, transparent 1px);
+  background-size: 6px 6px;
+}
+
+.vignette {
+  background: radial-gradient(120% 90% at 50% 40%, transparent 45%, rgba(0,0,0,0.35) 100%);
+}
+
+.lighthouse-watermark {
+  background-image: url('../blackbay_logo_watermark.png');
+  background-size: 110% auto;
+  background-position: center 10%;
+  background-repeat: no-repeat;
+}
+
+.red-grain {
+  background-image: radial-gradient(circle at 1px 1px, #ff4242 1px, transparent 1px);
+  background-size: 6px 6px;
+}
+
+/* Keyframes (marquee) previously inline */
+@keyframes scroll-left {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes scroll-right {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(50%); }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  [class*="animate-[scroll-"] { animation: none !important; }
+}

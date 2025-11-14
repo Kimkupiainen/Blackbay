@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8">
+  <title>IGDA Kajaani Game Awards – Äänestystilastot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Fontti -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --igda-orange: #f7931e;
+      --gold: #FFCC33;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1a1a1f 0%, #0a0a0d 55%, #000 100%);
+      color: #f5f5f5;
+      display: flex;
+      justify-content: center;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 1100px;
+      padding: 1.5rem 1.25rem 3rem;
+      position: relative;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.2rem 0.8rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(0, 0, 0, 0.5);
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #e5e7eb;
+    }
+
+    .pill-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--igda-orange);
+      box-shadow: 0 0 12px rgba(247, 147, 30, 0.9);
+    }
+
+    h1 {
+      margin: 0.75rem 0 0.25rem;
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      letter-spacing: 0.03em;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      color: #cfcfcf;
+      margin-top: 0.25rem;
+      opacity: 0.9;
+    }
+
+    .lead {
+      margin: 1rem auto 0;
+      max-width: 620px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: #d1d5db;
+      text-align: center;
+    }
+
+    .lead strong {
+      color: var(--igda-orange);
+    }
+
+    /* NEW: small info line about reveal date */
+    .reveal-info {
+      margin-top: 0.6rem;
+      font-size: 0.85rem;
+      color: #9ca3af;
+    }
+
+    /* status */
+
+    #status {
+      margin: 2rem auto 0;
+      max-width: 360px;
+      text-align: center;
+      padding: 0.75rem 1rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      font-size: 0.9rem;
+      color: #e5e7eb;
+    }
+
+    /* category cards */
+
+    #categories {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+      transition: filter 0.25s ease, opacity 0.25s ease;
+    }
+
+    /* blur til gate/date passed */
+    .blurred {
+      filter: blur(12px);
+      pointer-events: none;
+      user-select: none;
+      opacity: 0.6;
+    }
+
+    .category {
+      width: 100%;
+      padding: 1.75rem 1.5rem 1.5rem;
+      border-radius: 18px;
+      background: radial-gradient(circle at top left,
+                 rgba(255, 0, 128, 0.16),
+                 rgba(15, 23, 42, 0.8) 40%,
+                 rgba(0, 0, 0, 0.95) 100%);
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      box-shadow:
+        0 18px 35px rgba(0, 0, 0, 0.8),
+        0 0 18px rgba(59, 130, 246, 0.25);
+      backdrop-filter: blur(10px);
+      transition: transform 0.18s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .category:hover {
+      transform: translateY(-4px);
+      border-color: rgba(248, 250, 252, 0.85);
+      box-shadow:
+        0 25px 45px rgba(0, 0, 0, 0.9),
+        0 0 26px rgba(96, 165, 250, 0.6);
+    }
+
+    .category-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 0.75rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .category-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #f9fafb;
+    }
+
+    .category-meta {
+      font-size: 0.8rem;
+      color: #cbd5f5;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .divider {
+      height: 2px;
+      background: linear-gradient(90deg, #ff007f, #00aaff);
+      border-radius: 999px;
+      margin-bottom: 0.9rem;
+      opacity: 0.8;
+    }
+
+    /* nominees list */
+
+    .nominees {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nominee-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 0;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+    }
+
+    .nominee-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .nominee-name {
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      word-break: break-word;
+    }
+
+    .nominee-name a {
+      color: #93c5fd;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .nominee-name a:hover {
+      text-decoration: underline;
+    }
+
+    .votes {
+      font-weight: 600;
+      color: #fde68a;
+      font-variant-numeric: tabular-nums;
+      font-size: 0.95rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 1.6rem;
+      height: 1.25rem;
+      margin-left: 0.1rem;
+      padding: 0 0.35rem;
+      background: var(--gold);
+      color: #111827;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      box-shadow: 0 0 10px rgba(250, 204, 21, 0.7);
+    }
+
+    footer {
+      margin-top: 2.5rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #9ca3af;
+      opacity: 0.8;
+    }
+
+    /* GATE OVERLAY */
+
+    .gate-overlay {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top, rgba(15,23,42,0.98), rgba(3,7,18,0.98));
+      z-index: 20;
+    }
+
+    .gate-card {
+      width: 100%;
+      max-width: 420px;
+      padding: 1.75rem 1.5rem 1.5rem;
+      border-radius: 18px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      box-shadow:
+        0 24px 48px rgba(0, 0, 0, 0.9),
+        0 0 26px rgba(56, 189, 248, 0.4);
+    }
+
+    .gate-title {
+      font-size: 1.2rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .gate-text {
+      font-size: 0.9rem;
+      color: #e5e7eb;
+      margin-bottom: 1rem;
+    }
+
+    .gate-text small {
+      display: block;
+      margin-top: 0.3rem;
+      color: #9ca3af;
+    }
+
+    .gate-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #9ca3af;
+      margin-bottom: 0.3rem;
+    }
+
+    .gate-input {
+      width: 100%;
+      padding: 0.65rem 0.8rem;
+      border-radius: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      background: rgba(15, 23, 42, 0.9);
+      color: #f9fafb;
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .gate-input:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 1px rgba(56,189,248,0.7);
+    }
+
+    .gate-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .gate-btn {
+      flex: 1;
+      padding: 0.6rem 0.8rem;
+      border-radius: 999px;
+      border: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      transition: transform 0.1s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    .gate-btn-primary {
+      background: linear-gradient(90deg, #f97316, #fb7185);
+      color: #0b0b12;
+      box-shadow: 0 12px 24px rgba(248, 113, 113, 0.6);
+    }
+
+    .gate-btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 30px rgba(248, 113, 113, 0.8);
+    }
+
+    .gate-btn-ghost {
+      background: transparent;
+      color: #9ca3af;
+      border: 1px solid rgba(148,163,184,0.7);
+      box-shadow: none;
+    }
+
+    .gate-btn-ghost:hover {
+      background: rgba(15,23,42,0.9);
+    }
+
+    .gate-status {
+      margin-top: 0.5rem;
+      font-size: 0.82rem;
+      min-height: 1.1rem;
+      color: #fca5a5;
+    }
+
+    .gate-status.ok {
+      color: #bbf7d0;
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        padding-inline: 1rem;
+      }
+      .category {
+        padding-inline: 1.1rem;
+      }
+      #status {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- GATE OVERLAY -->
+    <div class="gate-overlay" id="gateOverlay">
+      <div class="gate-card">
+        <div class="gate-title">Näytä Game Awards -lippusi</div>
+        <p class="gate-text">
+          Äänestystilastot näkyvät vain niille, joilla on lippu
+          <strong>IGDA Kajaani Game Awards</strong> -iltaan.
+          <small>Syötä se sähköpostiosoite, jota käytit Eventbrite-lipun varaamiseen.</small>
+        </p>
+
+        <label class="gate-label" for="ticketEmail">Eventbrite-sähköpostiosoite</label>
+        <input id="ticketEmail" class="gate-input" type="email" placeholder="esimerkki@domain.fi" autocomplete="email">
+
+        <div class="gate-actions">
+          <button class="gate-btn gate-btn-primary" id="checkTicketBtn">
+            ✅ Tarkista lippu
+          </button>
+          <button class="gate-btn gate-btn-ghost" id="noTicketInfo">
+            Minulla ei ole lippua
+          </button>
+        </div>
+        <div id="gateStatus" class="gate-status"></div>
+      </div>
+    </div>
+
+    <header>
+      <div class="pill">
+        <span class="pill-dot"></span>
+        IGDA Kajaani • Community Awards
+      </div>
+      <h1>IGDA Kajaani Game Awards – Äänestystilastot</h1>
+      <p class="subtitle">Live-tilanne yhteisön äänistä, anonyymisti koottuna.</p>
+      <p class="lead">
+        Tämä sivu näyttää, miten ääniä on kertynyt eri kategorioissa.
+        <strong>Sähköposteja tai henkilötietoja ei koskaan näytetä julkisesti.</strong>
+      </p>
+      <p id="revealInfo" class="reveal-info"></p>
+    </header>
+
+    <main>
+      <div id="status">Ladataan äänestysdataa…</div>
+      <div id="categories" class="blurred"></div>
+    </main>
+
+    <footer>
+      IGDA Kajaani &middot; Data päivittyy Google Sheetsistä reaaliaikaisesti.
+    </footer>
+  </div>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbyDRfKGZL2r-u0UjX-ma9XUBvqOYMFhPzWZf8eoKQO7juJRyUMw9LCS0xvBMv2uh8qE/exec";
+    const STORAGE_KEY = "igdaKajaaniAwardsTicketOK";
+
+    // 🔴 CHANGE THIS to your real reveal time (local Helsinki time)
+    const REVEAL_AT = new Date("2025-11-28T18:00:00+02:00");
+    const REVEAL_AT_TEXT = "28.11.2025 klo 18.00";
+
+    function isAfterRevealDate() {
+      return new Date() >= REVEAL_AT;
+    }
+
+    function parseNomineeName(name) {
+      const parts = String(name).split("http");
+      if (parts.length === 1) {
+        return { label: name, href: null };
+      }
+      const label = parts[0].trim();
+      const url = "http" + parts[1].trim();
+      return { label: label || url, href: url };
+    }
+
+    function hasTicketAccess() {
+      return localStorage.getItem(STORAGE_KEY) === "yes";
+    }
+
+    function grantTicketAccess() {
+      localStorage.setItem(STORAGE_KEY, "yes");
+      const overlay = document.getElementById("gateOverlay");
+      const categories = document.getElementById("categories");
+      overlay.style.display = "none";
+      categories.classList.remove("blurred");
+    }
+
+    // currently still Sheet/placeholder based – replace later with Eventbrite API if you want
+    async function checkTicket(email) {
+      const res = await fetch(API_URL + "?mode=ticket&email=" + encodeURIComponent(email.trim()));
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      return data && data.valid === true;
+    }
+
+    async function loadData() {
+      const status = document.getElementById('status');
+      const container = document.getElementById('categories');
+
+      try {
+        const res = await fetch(API_URL);
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const data = await res.json();
+
+        if (!data.categories || data.categories.length === 0) {
+          status.textContent = "Ei vielä äänestysdataa.";
+          return;
+        }
+
+        status.style.display = "none";
+        container.innerHTML = "";
+
+        data.categories.forEach(category => {
+          const section = document.createElement('section');
+          section.className = 'category';
+
+          const headerDiv = document.createElement('div');
+          headerDiv.className = 'category-header';
+
+          const title = document.createElement('div');
+          title.className = 'category-title';
+          title.textContent = category.name;
+
+          const meta = document.createElement('div');
+          meta.className = 'category-meta';
+          meta.textContent = "Ääniä yhteensä: " +
+            category.nominees.reduce((sum, n) => sum + n.votes, 0);
+
+          headerDiv.appendChild(title);
+          headerDiv.appendChild(meta);
+          section.appendChild(headerDiv);
+
+          const divider = document.createElement('div');
+          divider.className = 'divider';
+          section.appendChild(divider);
+
+          const list = document.createElement('ul');
+          list.className = 'nominees';
+
+          category.nominees.forEach((nominee, index) => {
+            const row = document.createElement('li');
+            row.className = 'nominee-row';
+
+            const nameSpan = document.createElement('div');
+            nameSpan.className = 'nominee-name';
+
+            const { label, href } = parseNomineeName(nominee.name);
+            if (href) {
+              const link = document.createElement('a');
+              link.href = href;
+              link.target = "_blank";
+              link.rel = "noopener noreferrer";
+              link.textContent = label;
+              nameSpan.appendChild(link);
+            } else {
+              nameSpan.textContent = label;
+            }
+
+            if (index === 0) {
+              const badge = document.createElement('span');
+              badge.className = 'badge';
+              badge.textContent = '🥇';
+              nameSpan.appendChild(badge);
+            }
+            if (index === 1) {
+              const badge = document.createElement('span');
+              badge.className = 'badge';
+              badge.textContent = '🥈';
+              nameSpan.appendChild(badge);
+            }
+            if (index === 2) {
+              const badge = document.createElement('span');
+              badge.className = 'badge';
+              badge.textContent = '🥉';
+              nameSpan.appendChild(badge);
+            }
+
+            const votesSpan = document.createElement('span');
+            votesSpan.className = 'votes';
+            votesSpan.textContent = nominee.votes + " ääntä";
+
+            row.appendChild(nameSpan);
+            row.appendChild(votesSpan);
+            list.appendChild(row);
+          });
+
+          section.appendChild(list);
+          container.appendChild(section);
+        });
+
+        // Date-based: if reveal time is past, automatically show results to everyone
+        if (isAfterRevealDate()) {
+          const overlay = document.getElementById("gateOverlay");
+          const categories = document.getElementById("categories");
+          overlay.style.display = "none";
+          categories.classList.remove("blurred");
+        } else if (hasTicketAccess()) {
+          // before reveal: only show for users who already passed the gate
+          grantTicketAccess();
+        }
+
+      } catch (err) {
+        console.error(err);
+        const status = document.getElementById('status');
+        status.textContent = "Virhe ladattaessa äänestysdataa. Tarkista API_URL.";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const overlay = document.getElementById("gateOverlay");
+      const categories = document.getElementById("categories");
+      const emailInput = document.getElementById("ticketEmail");
+      const checkBtn = document.getElementById("checkTicketBtn");
+      const noTicketBtn = document.getElementById("noTicketInfo");
+      const gateStatus = document.getElementById("gateStatus");
+      const revealInfo = document.getElementById("revealInfo");
+
+      // Update text about reveal timing
+      if (isAfterRevealDate()) {
+        revealInfo.textContent = "Tulokset ovat nyt julkisia.";
+      } else {
+        revealInfo.textContent = "Tulokset näytetään kokonaan " + REVEAL_AT_TEXT + " alkaen.";
+      }
+
+      // If reveal date is already past → no gate at all, no blur
+      if (isAfterRevealDate()) {
+        overlay.style.display = "none";
+        categories.classList.remove("blurred");
+      } else if (hasTicketAccess()) {
+        // before reveal but user previously passed gate
+        overlay.style.display = "none";
+        categories.classList.remove("blurred");
+      }
+
+      checkBtn.addEventListener("click", async () => {
+        const email = emailInput.value.trim();
+        gateStatus.classList.remove("ok");
+        gateStatus.textContent = "";
+
+        if (!email) {
+          gateStatus.textContent = "Syötä sähköpostiosoite.";
+          return;
+        }
+
+        gateStatus.textContent = "Tarkistetaan lippua…";
+
+        try {
+          const valid = await checkTicket(email);
+          if (valid) {
+            gateStatus.textContent = "Lippu löytyi – tervetuloa!";
+            gateStatus.classList.add("ok");
+            grantTicketAccess();
+          } else {
+            gateStatus.textContent = "Lippua ei löytynyt tällä osoitteella.";
+          }
+        } catch (e) {
+          console.error(e);
+          gateStatus.textContent = "Tarkistus epäonnistui. Yritä uudelleen myöhemmin.";
+        }
+      });
+
+      noTicketBtn.addEventListener("click", () => {
+        gateStatus.classList.remove("ok");
+        gateStatus.textContent = "Jos haluat nähdä tulokset, hanki lippu Eventbritesta. ❤️";
+      });
+
+      loadData();
+    });
+  </script>
+</body>
+</html>
