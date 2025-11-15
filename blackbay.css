@@ -19,7 +19,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
 /* Background helpers moved from inline styles */
 .backdrop-noise {
-  background-image: radial-gradient(circle at 1px 1px, #fff 1px, transparent 1px);
+  background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.35) 1px, transparent 1px);
   background-size: 6px 6px;
 }
 
@@ -35,7 +35,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 .red-grain {
-  background-image: radial-gradient(circle at 1px 1px, #ff4242 1px, transparent 1px);
+  background-image: radial-gradient(circle at 1px 1px, rgba(255, 66, 66, 0.4) 1px, transparent 1px);
   background-size: 6px 6px;
 }
 

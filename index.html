@@ -150,7 +150,7 @@
             Production with love and care
           </h2>
           <p>
-            I’m Kim, a Finland-based Senior Producer with over a decade of working in games accross all platforms. 
+            I’m Kim, a Finland-based Senior Producer with over a decade of working in games across all platforms. 
 			I’ve led teams through launches, rescues, and long-tail LiveOps while keeping players,
             partners, and teams in the loop.
           </p>
@@ -271,9 +271,7 @@
           </li>
           <li class="rounded-2xl ring-1 ring-white/10 bg-white/5 p-5">
             <p class="text-zinc-300/95">
-              <span class="font-semibold">Anti-tamper &amp; Moderation:</span> Worked with engineers and community teams to
-              align risk tolerance, technical constraints, and moderation workflows — reducing exploit recovery time and
-              protecting staff from unsafe processes.
+              <span class="font-semibold">Team Health &amp; Delivery:</span> Revitalised underperforming teams by clarifying ownership, tightening feedback loops, and adjusting scope, leading to up to 5× content output and roughly 20% faster delivery without burning people out.
             </p>
           </li>
           <li class="rounded-2xl ring-1 ring-white/10 bg-white/5 p-5">
@@ -359,39 +357,7 @@
       </section>
     </footer>
 
-    <script>
-      // year
-      document.getElementById('year').textContent = new Date().getFullYear();
-
-      // countdown (currently disabled – elements are commented out)
-      const dd = document.getElementById('dd');
-      const hh = document.getElementById('hh');
-      const mm = document.getElementById('mm');
-      const ss = document.getElementById('ss');
-
-      function tick() {
-        const target = new Date('2026-02-01T00:00:00+02:00').getTime();
-        const now = Date.now();
-        let delta = Math.max(0, target - now);
-        const d = Math.floor(delta / 86400000);
-        delta -= d * 86400000;
-        const h = Math.floor(delta / 3600000);
-        delta -= h * 3600000;
-        const m = Math.floor(delta / 60000);
-        delta -= m * 60000;
-        const s = Math.floor(delta / 1000);
-        dd.textContent = d;
-        hh.textContent = String(h).padStart(2, '0');
-        mm.textContent = String(m).padStart(2, '0');
-        ss.textContent = String(s).padStart(2, '0');
-      }
-
-      const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-      if (dd && hh && mm && ss && !mq.matches) {
-        tick();
-        setInterval(tick, 1000);
-      }
-    </script>
+  
 	<!-- Calendly badge widget begin --> <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet"> <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script> <script type="text/javascript">window.onload = function() { Calendly.initBadgeWidget({ url: 'https://calendly.com/kim-kupiainen/45min', text: 'Schedule time with me', color: '#9f1717', textColor: '#ffffff', branding: true }); }</script> <!-- Calendly badge widget end -->
   </body>
 </html>
