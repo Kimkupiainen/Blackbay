@@ -53,3 +53,72 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 @media (prefers-reduced-motion: reduce) {
   [class*="animate-[scroll-"] { animation: none !important; }
 }
+
+/* --------------------------------------------------------
+   Typography helpers for Blackbay (used on Privacy page)
+   -------------------------------------------------------- */
+
+/* Big page title ("Privacy Policy") */
+.heading-hero {
+  font-size: clamp(2.25rem, 4vw, 3.25rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+/* Section titles: "1. Information We Collect", etc. */
+.heading-section {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-weight: 600;
+  color: rgba(228, 228, 231, 0.9); /* zinc-200-ish */
+}
+
+/* Subheadings inside sections: "Personal Information", etc. */
+.heading-card {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-top: 1.25rem;
+  color: rgba(244, 244, 245, 0.96); /* zinc-100-ish */
+}
+
+/* Main body copy */
+.body-main {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: rgba(228, 228, 231, 0.9); /* zinc-200 */
+}
+
+/* Smaller body text (timestamps, footer, etc.) */
+.body-small {
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: rgba(161, 161, 170, 0.9); /* zinc-400 */
+}
+
+/* Lists inside privacy text – keep spacing tidy */
+.body-main + ul,
+.body-main + ol,
+ul.body-main,
+ol.body-main {
+  margin-top: 0.5rem;
+}
+
+ul.body-main,
+ol.body-main {
+  padding-left: 1.25rem;
+}
+
+/* Optional: links inside long-form text look softer */
+.body-main a,
+.body-small a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(248, 250, 252, 0.35);
+}
+.body-main a:hover,
+.body-small a:hover {
+  text-decoration-color: rgba(248, 250, 252, 0.9);
+}
