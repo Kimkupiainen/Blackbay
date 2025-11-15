@@ -93,33 +93,52 @@
     </div>
 
     <!-- Header -->
-    <header class="sticky top-0 z-20 backdrop-blur supports-[backdrop-filter]:bg-black/40">
-      <section class="max-w-7xl mx-auto px-6 md:px-10 py-4 flex items-center justify-between">
-        <a href="#top" class="flex items-center gap-2 font-semibold tracking-wide">
-          <span class="relative inline-block">
-            <span class="h-7 w-7 rounded-xl bg-gradient-to-br from-[#7a1f1f] to-[#ff4242] block"></span>
-          </span>
-          <span>BLACKBAY</span>
-        </a>
-        <nav class="hidden md:flex items-center gap-4 text-sm">
-          <a href="#about" class="opacity-80 hover:opacity-100 transition">About</a>
-          <a href="#services" class="opacity-80 hover:opacity-100 transition">Services</a>
-          <a href="#track-record" class="opacity-80 hover:opacity-100 transition">Track record</a>
-          <a href="#faq" class="opacity-80 hover:opacity-100 transition">FAQ</a>
-          <a
-            href="https://www.linkedin.com/in/kimkupiainen"
-            class="opacity-80 hover:opacity-100 transition"
-            rel="noopener"
-            >LinkedIn</a
-          >
-          <a
-            href="mailto:hello@blackbay.fi?subject=Blackbay%20–%20project%20enquiry"
-            class="inline-flex items-center gap-2 rounded-2xl px-4 py-2 text-sm bg-white/10 hover:bg-white/20 transition"
-            >Contact</a
-          >
-        </nav>
-      </section>
-    </header>
+<header class="sticky top-0 z-20 backdrop-blur supports-[backdrop-filter]:bg-black/40">
+  <section class="max-w-7xl mx-auto px-6 md:px-10 py-4 flex items-center justify-between">
+    
+	<a href="#top" class="flex items-center gap-3 font-semibold tracking-wide">
+	  <img
+		src="small-logo.png"
+		alt="Blackbay logo"
+		class="h-7 w-auto object-contain"
+	  />
+	  <span>BLACKBAY</span>
+	</a>
+
+
+    <!-- Desktop nav -->
+    <nav class="hidden md:flex items-center gap-4 text-sm">
+      <a href="#about" class="opacity-80 hover:opacity-100 transition">About</a>
+      <a href="#services" class="opacity-80 hover:opacity-100 transition">Services</a>
+      <a href="#track-record" class="opacity-80 hover:opacity-100 transition">Track record</a>
+      <a href="#faq" class="opacity-80 hover:opacity-100 transition">FAQ</a>
+      <a href="https://www.linkedin.com/in/kimkupiainen" class="opacity-80 hover:opacity-100">LinkedIn</a>
+    </nav>
+
+    <!-- Mobile hamburger -->
+    <button id="mobileMenuBtn" class="md:hidden text-zinc-200 text-2xl focus:outline-none">
+      ☰
+    </button>
+  </section>
+
+  <!-- Mobile menu panel -->
+  <div id="mobileMenu" class="hidden flex-col gap-4 px-6 pb-6 text-sm bg-black/80 backdrop-blur md:hidden">
+    <a href="#about" class="py-2 border-b border-white/10">About</a>
+    <a href="#services" class="py-2 border-b border-white/10">Services</a>
+    <a href="#track-record" class="py-2 border-b border-white/10">Track record</a>
+    <a href="#faq" class="py-2 border-b border-white/10">FAQ</a>
+    <a href="https://www.linkedin.com/in/kimkupiainen" class="py-2 border-b border-white/10">LinkedIn</a>
+  </div>
+</header>
+
+<script>
+  const menuBtn = document.getElementById("mobileMenuBtn");
+  const menu = document.getElementById("mobileMenu");
+
+  menuBtn.addEventListener("click", () => {
+    menu.classList.toggle("hidden");
+  });
+</script>
 
     <!-- Hero -->
     <main id="top" class="max-w-7xl mx-auto px-6 md:px-10 pt-16 md:pt-24 pb-24">
